@@ -2,6 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Todo {
+  id: Int!
+  description: String!
+  status: Boolean!
+}
+
 type Query {
+  """This field always return a string message!"""
   helloWorld: String!
+  randomNumber: Float!
+  randomFromZeroTo: Int!
+  randonNumberFromZeroToCustom(to: Int): Int!
+  todos: [Todo!]!
 }
