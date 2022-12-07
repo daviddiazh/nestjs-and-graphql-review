@@ -13,6 +13,18 @@ export class TodoService {
         { id: 3, description: 'Ajustar Frontend de WalletApp con GraphQL', status: false },
     ];
 
+    get totalTodos() {
+        return this.todos.length;
+    }
+
+    get completedTodos () {
+        return this.todos.filter(todo => todo.status === true).length;
+    }
+
+    get pendingTodos () {
+        return this.todos.filter(todo => todo.status === false).length;
+    }
+
     findAll( statusArgs: StatusArgs ): Todo[] {
         const { status } = statusArgs;
 
