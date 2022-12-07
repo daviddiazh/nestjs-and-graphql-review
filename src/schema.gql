@@ -15,4 +15,13 @@ type Query {
   randomFromZeroTo: Int!
   randonNumberFromZeroToCustom(to: Int): Int!
   todos: [Todo!]!
+  todo(id: Int!): Todo!
+}
+
+type Mutation {
+  createTodo(createTodoInput: CreateTodoInput!): Todo!
+}
+
+input CreateTodoInput {
+  description: String!
 }
