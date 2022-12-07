@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Todo } from './entity/todo.entity';
 import { CreateTodoInput } from './dto/inputs/create-todo.input';
 import { UpdateTodoInput } from './dto/inputs/update-todo.input';
+import { StatusArgs } from './dto/args/status.args';
 
 @Injectable()
 export class TodoService {
@@ -12,7 +13,13 @@ export class TodoService {
         { id: 3, description: 'Ajustar Frontend de WalletApp con GraphQL', status: false },
     ];
 
-    findAll(): Todo[] {
+    findAll( statusArgs: StatusArgs ): Todo[] {
+        const { status } = statusArgs;
+
+        if( status !== undefined ) {
+            return this.todos.filter(todo => todo.status === status)
+        }
+
         return this.todos;
     }
 
@@ -38,12 +45,24 @@ export class TodoService {
 
 
     update(updateTodoInput: UpdateTodoInput): Todo {
-        const todo = this.findOne( updateTodoInput.id );
+        const todoToUpdate = this.findOne( updateTodoInput.id );
 
-        if( updateTodoInput.description ) todo.description = updateTodoInput.description;
-        if( updateTodoInput.status !== undefined ) todo.status = updateTodoInput.status;
+        if( updateTodoInput.description ) todoToUpdate.description = updateTodoInput.description;
+        if( updateTodoInput.status !== undefined ) todoToUpdate.status = updateTodoInput.status;
 
-        return todo;
+        this.todos.map( todo => {
+            return ( todo.id === updateTodoInput.id ) ? todoToUpdate : todo
+        })
+
+        return todoToUpdate;
+    }
+
+    remove(id: number): Boolean {
+        const todo = this.findOne( id );
+
+        this.todos = this.todos.filter(todo => todo.id !== id);
+
+        return true;
     }
 
 }

@@ -3,9 +3,10 @@ import { Todo } from './entity/todo.entity';
 import { TodoService } from './todo.service';
 import { CreateTodoInput } from './dto/inputs/create-todo.input';
 import { UpdateTodoInput } from './dto/inputs/update-todo.input';
+import { StatusArgs } from './dto/args/status.args';
 
 //The Resolver decorator is equal to Controller in rest full api
-@Resolver()
+@Resolver( () => Todo )
 export class TodoResolver {
 
     constructor(
@@ -13,8 +14,10 @@ export class TodoResolver {
     ){}
 
     @Query( () => [ Todo ], { name: 'todos' } )
-    findAll(): Todo[] {
-        return this.todoService.findAll();
+    findAll(
+        @Args() statusArgs: StatusArgs
+    ): Todo[] {
+        return this.todoService.findAll( statusArgs );
     }
 
     @Query( () => Todo, { name: 'todo' } )
@@ -32,9 +35,9 @@ export class TodoResolver {
         return this.todoService.update( updateTodoInput );
     }
 
-    // @Mutation()
-    // deleteTodo() {
-        
-    // }
+    @Mutation( () => Boolean, { name: 'removeTodo' } )
+    removeTodo(@Args('id', { type: () => Int }) id: number) {
+        return this.todoService.remove( id );
+    }
 
 }
