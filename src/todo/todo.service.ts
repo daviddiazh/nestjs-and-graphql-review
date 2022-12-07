@@ -38,13 +38,11 @@ export class TodoService {
 
 
     update(updateTodoInput: UpdateTodoInput): Todo {
-        const todo = this.todos.find(todo => todo.id === updateTodoInput.id);
+        const todo = this.findOne( updateTodoInput.id );
 
-        if( !todo ) {
-            throw new NotFoundException(`TODO ${updateTodoInput.id} no encontrado...`);
-        }
+        if( updateTodoInput.description ) todo.description = updateTodoInput.description;
+        if( updateTodoInput.status !== undefined ) todo.status = updateTodoInput.status;
 
-        todo.description = updateTodoInput.description;
         return todo;
     }
 

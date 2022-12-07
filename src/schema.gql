@@ -30,4 +30,5 @@ input CreateTodoInput {
 input UpdateTodoInput {
   id: Int!
   description: String
+  status: Boolean
 }
